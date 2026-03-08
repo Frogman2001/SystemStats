@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\SystemStats.Contracts\SystemStats.Contracts.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>SystemStats.Persistence</RootNamespace>
+    <AssemblyName>SystemStats.Persistence</AssemblyName>
+  </PropertyGroup>
+
+</Project>
+

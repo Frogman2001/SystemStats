@@ -1,0 +1,45 @@
+# C# / .NET Coding Standards
+
+## 1. Commenting & Documentation
+- **No Obvious Comments:** Do not add comments that explain WHAT the code is doing (e.g., // initialize list).
+- **"Why" over "What":** Only use comments to explain complex business logic, "hacks," or non-obvious architectural decisions.
+- **XML Documentation:** Use triple-slash (///) comments only on public API members or complex internal methods. Keep them concise.
+
+## 2. Architecture & Design
+- **SOLID Principles:** Strictly adhere to Single Responsibility. If a method does more than one thing, refactor it.
+- **DRY (Don't Repeat Yourself):** Abstract shared logic into private methods or helper classes.
+- **Composition over Inheritance:** Prefer interfaces and composition unless there is a clear "is-a" relationship.
+- **Dependency Injection:** Use constructor injection for all dependencies. Avoid the "new" keyword for services.
+
+## 3. File & Method Constraints
+- **Small Files:** Aim for files under 750 lines. If a file exceeds 1000 lines, it MUST be split.
+- **One Class Per File:** Each top-level class must live in its own `.cs` file. Do not place multiple top-level classes in a single file.
+- **Interfaces In Separate Files:** Define each interface in its own `.cs` file, separate from concrete implementing classes.
+- **Method Length:** Aim for methods under 100 lines. Methods exceeding 200 lines are a "code smell."
+- **Nesting:** Avoid deep nesting (max 3 levels). Use guard clauses (return early) to keep code flat.
+
+## 4. C# Specifics
+- **Modern Syntax:** Use C# 12+ features (Primary constructors, collection expressions, file-scoped namespaces).
+- **Async/Await:** Use async/await all the way up. Always use `ConfigureAwait(false)` in library code (but not in ASP.NET Core apps).
+- **Strong Typing:** Avoid `dynamic`. Use records for DTOs and data-only structures.
+
+## 5. Formatting
+- Use file-scoped namespaces (e.g., `namespace MyProject.Services;`).
+- Follow standard Microsoft naming conventions (PascalCase for methods/classes, _camelCase for private fields).
+- Ensure that files do not contain blank lines at the
+
+## 6. Constants & Configuration
+- **No Magic Strings/Numbers:** Never use hardcoded strings or numeric literals in logic (e.g., `if (status == "Active")` or `Calculate(val * 0.05)`).
+- **Prioritize AppSettings:** Values that may change between environments (URLs, Timeouts, Feature Flags) MUST be placed in `appsettings.json` and accessed via `IOptions<T>`.
+- **Local Constants:** If a value is truly constant and internal to the class, define it at the top of the file using `private const` or `private static readonly`.
+- **Enums for States:** Use `enum` for state management or fixed categories instead of strings or integers.
+- **Path/URL Formatting:** Use `Path.Combine` or `Uri` classes instead of manual string concatenation for paths and URLs.
+
+## 7. Error Handling & Fail-Fast
+- **No Silent Failures:** Never "swallow" an exception with an empty catch block or by returning a default/fallback value for a critical failure.
+- **Explicit Exceptions:** If a required configuration, dependency, or variable is missing, throw a descriptive exception immediately (e.g., `InvalidOperationException` or a custom `ConfigurationMissingException`).
+- **Descriptive Messages:** Error messages must include context. 
+    - Bad: "Value missing."
+    - Good: "Required configuration 'PaymentGateway:ApiKey' is missing from appsettings.json. Application cannot process payments."
+- **Log Before Throw:** Log the error details (including context variables) using `ILogger` before throwing, or rely on a global exception handler that logs the full stack trace.
+- **No Hardcoded Fallbacks:** Do not use `?? "default_value"` for values that are essential to business logic or security. If it's missing, the process MUST stop.
